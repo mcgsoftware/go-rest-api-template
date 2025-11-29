@@ -1,0 +1,100 @@
+openapi: 3.0.3
+info:
+  title: Go REST API Template
+  description: A production-ready REST API template built with Gin and PostgreSQL
+  version: 1.0.0
+  contact:
+    name: API Support
+servers:
+  - url: http://localhost:8080
+    description: Local development server
+
+paths:
+  /health:
+    get:
+      summary: Liveness check
+      description: Returns 200 if the server is running. Used for liveness probes.
+      tags:
+        - Health
+      responses:
+        '200':
+          description: Server is alive
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HealthResponse'
+              example:
+                status: ok
+                timestamp: "2024-01-15T10:30:00Z"
+
+  /ready:
+    get:
+      summary: Readiness check
+      description: Returns 200 if the server and all dependencies are healthy. Used for readiness probes.
+      tags:
+        - Health
+      responses:
+        '200':
+          description: Server is ready
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReadyResponse'
+              example:
+                status: ok
+                timestamp: "2024-01-15T10:30:00Z"
+                checks:
+                  database: healthy
+        '503':
+          description: Server is not ready
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReadyResponse'
+              example:
+                status: unhealthy
+                timestamp: "2024-01-15T10:30:00Z"
+                checks:
+                  database: "unhealthy: connection refused"
+
+components:
+  schemas:
+    HealthResponse:
+      type: object
+      required:
+        - status
+        - timestamp
+      properties:
+        status:
+          type: string
+          description: Health status
+          enum: [ok]
+        timestamp:
+          type: string
+          format: date-time
+          description: Timestamp of the health check
+
+    ReadyResponse:
+      type: object
+      required:
+        - status
+        - timestamp
+        - checks
+      properties:
+        status:
+          type: string
+          description: Overall readiness status
+          enum: [ok, unhealthy]
+        timestamp:
+          type: string
+          format: date-time
+          description: Timestamp of the readiness check
+        checks:
+          type: object
+          description: Individual dependency health checks
+          additionalProperties:
+            type: string
+
+tags:
+  - name: Health
+    description: Health check endpoints for monitoring and orchestration
