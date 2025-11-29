@@ -1,0 +1,25 @@
+-- PostgreSQL Schema
+-- This file defines the database schema for the application.
+-- Add your table definitions here.
+
+-- Example users table (uncomment and modify as needed):
+-- CREATE TABLE IF NOT EXISTS users (
+--     id SERIAL PRIMARY KEY,
+--     name VARCHAR(255) NOT NULL,
+--     email VARCHAR(255) UNIQUE NOT NULL,
+--     created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+--     updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+-- );
+
+-- Example function for searching users by date range:
+-- CREATE OR REPLACE FUNCTION search_users_by_date_range(
+--     start_date TIMESTAMP,
+--     end_date TIMESTAMP
+-- ) RETURNS SETOF users AS $$
+-- BEGIN
+--     RETURN QUERY
+--     SELECT * FROM users
+--     WHERE created_at >= start_date AND created_at <= end_date
+--     ORDER BY created_at;
+-- END;
+-- $$ LANGUAGE plpgsql;
